@@ -8,7 +8,7 @@ import com.example.myrunjwl.databinding.RowBinding
 
 class ChallengeDataAdapter(val items:ArrayList<ChallengeData>): RecyclerView.Adapter<ChallengeDataAdapter.ViewHolder>() {
     interface OnItemClickListener{
-        fun onItemClick(data: ChallengeData, adapterPosition: Int)
+        fun onItemClick(data: ChallengeData, items:ArrayList<ChallengeData>, adapterPosition: Int)
     }
 
     var itemClickListener:OnItemClickListener?=null
@@ -16,7 +16,7 @@ class ChallengeDataAdapter(val items:ArrayList<ChallengeData>): RecyclerView.Ada
     inner class ViewHolder(val binding: RowBinding) : RecyclerView.ViewHolder(binding.root){
         init {
             binding.textView.setOnClickListener {
-                itemClickListener?.onItemClick(items[adapterPosition], adapterPosition)
+                itemClickListener?.onItemClick(items[adapterPosition], items, adapterPosition)
             }
         }
     }

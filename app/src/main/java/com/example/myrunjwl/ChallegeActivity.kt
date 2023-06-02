@@ -2,9 +2,6 @@ package com.example.myrunjwl
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.speech.tts.TextToSpeech
-import android.util.Log
-import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myrunjwl.databinding.ActivityChallegeBinding
 import java.io.PrintStream
@@ -26,8 +23,12 @@ class ChallegeActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-        val scan = Scanner(resources.openRawResource(R.raw.challenges))
-        while (scan.hasNextLine()){
+        val scan = try {
+            Scanner(openFileInput("challenge_list.txt"))
+        }catch (e : Exception) {
+            Scanner(resources.openRawResource(R.raw.challenge_list))
+        }
+        while (scan.hasNext()) {
             val km = scan.next()
             val select = scan.next()
             datas.add(ChallengeData(km, select.toInt()))
@@ -39,19 +40,31 @@ class ChallegeActivity : AppCompatActivity() {
             challengeList.layoutManager = LinearLayoutManager(this@ChallegeActivity, LinearLayoutManager.VERTICAL, false)
             adapter = ChallengeDataAdapter(datas)
             adapter.itemClickListener = object:ChallengeDataAdapter.OnItemClickListener{
-                override fun onItemClick(data: ChallengeData, adapterPosition: Int) {
+                override fun onItemClick(data: ChallengeData, items:ArrayList<ChallengeData>, adapterPosition: Int) {
+                    // 선택된 챌린지 전달
+                    var output = PrintStream(openFileOutput("challenge.txt", MODE_PRIVATE))
+                    var selectKm = data.km
                     data.select = when (data.select) {
-                        0 -> {
-                            val output = PrintStream(openFileOutput("challenge.txt", MODE_PRIVATE))
-                            output.println(data.km)
-                            output.close()
-                            // challenges.txt 에도 적용시키자.
-                            // 한 개만 활성화 되게 바꾸자.
-                            1
+                        0 -> 1
+                        else -> {
+                            selectKm = "0"
+                            0
                         }
-                        else -> 0
                     }
-                    adapter.notifyItemChanged(adapterPosition)
+                    output.println(selectKm)
+                    output.close()
+                    // 챌린지 내에서 쓸 데이터 조작
+                    output = PrintStream(openFileOutput("challenge_list.txt", MODE_PRIVATE))
+                    for (i in items.indices) {
+                        if (i != adapterPosition) { // 다른 챌린지가 켜져있다면, 꺼버리기
+                            items[i] = ChallengeData(items[i].km, 0)
+                            output.println("${items[i].km} 0")
+                        }
+                        else
+                            output.println("${items[i].km} ${data.select}") // 선택된 챌린지 변경 적용
+                    }
+                    output.close()
+                    adapter.notifyDataSetChanged()
                 }
             }
             challengeList.adapter = adapter
