@@ -2,6 +2,7 @@ package com.example.myrunjwl
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myrunjwl.databinding.ActivityChallegeBinding
 import java.io.PrintStream
@@ -40,28 +41,20 @@ class ChallegeActivity : AppCompatActivity() {
             challengeList.layoutManager = LinearLayoutManager(this@ChallegeActivity, LinearLayoutManager.VERTICAL, false)
             adapter = ChallengeDataAdapter(datas)
             adapter.itemClickListener = object:ChallengeDataAdapter.OnItemClickListener{
-                override fun onItemClick(data: ChallengeData, items:ArrayList<ChallengeData>, adapterPosition: Int) {
-                    // 선택된 챌린지 전달
-                    var output = PrintStream(openFileOutput("challenge.txt", MODE_PRIVATE))
-                    var selectKm = data.km
+                override fun onItemClick(data: ChallengeData, adapterPosition: Int) {
                     data.select = when (data.select) {
                         0 -> 1
-                        else -> {
-                            selectKm = "0"
-                            0
-                        }
+                        else -> 0
                     }
-                    output.println(selectKm)
-                    output.close()
                     // 챌린지 내에서 쓸 데이터 조작
-                    output = PrintStream(openFileOutput("challenge_list.txt", MODE_PRIVATE))
-                    for (i in items.indices) {
+                    val output = PrintStream(openFileOutput("challenge_list.txt", MODE_PRIVATE))
+                    for (i in datas.indices) {
                         if (i != adapterPosition) { // 다른 챌린지가 켜져있다면, 꺼버리기
-                            items[i] = ChallengeData(items[i].km, 0)
-                            output.println("${items[i].km} 0")
+                            datas[i] = ChallengeData(datas[i].km, 0)
+                            output.println("${datas[i].km} 0")
                         }
                         else
-                            output.println("${items[i].km} ${data.select}") // 선택된 챌린지 변경 적용
+                            output.println("${datas[i].km} ${data.select}") // 선택된 챌린지 변경 적용
                     }
                     output.close()
                     adapter.notifyDataSetChanged()
@@ -69,5 +62,21 @@ class ChallegeActivity : AppCompatActivity() {
             }
             challengeList.adapter = adapter
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // 선택된 챌린지 전달
+        val output = PrintStream(openFileOutput("challenge.txt", MODE_PRIVATE))
+        var selectSomething = false
+        for (data in datas) {
+            if (data.select == 1) {
+                selectSomething = true
+                output.println(data.km)
+            }
+        }
+        if (!selectSomething)
+            output.println("0")
+        output.close()
     }
 }

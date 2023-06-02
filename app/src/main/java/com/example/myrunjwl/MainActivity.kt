@@ -3,6 +3,7 @@ package com.example.myrunjwl
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.example.myrunjwl.databinding.ActivityMainBinding
 import java.util.*
@@ -22,13 +23,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun initLayout() {
         binding.apply {
-            var scan = Scanner(openFileInput("challenge.txt"))
-            val km = scan.nextLine()
+            var scan:Scanner
+            var km:String
+            try {
+                scan = Scanner(openFileInput("challenge.txt"))
+                km = scan.nextLine()
+            } catch (e : Exception) {
+                km = "0"
+            }
             btnChall.text = km
-            scan = Scanner(openFileInput("setting.txt"))
             var sets = ""
-            while (scan.hasNextLine()){
-                sets += scan.nextLine() + "\n"
+            try {
+                scan = Scanner(openFileInput("setting.txt"))
+                while (scan.hasNextLine()){
+                    sets += scan.nextLine() + "\n"
+                }
+            } catch (e : Exception) {
+                sets = "0\n0\n0\n"
             }
             btnSet.text = sets
             btnChall.setOnClickListener {
