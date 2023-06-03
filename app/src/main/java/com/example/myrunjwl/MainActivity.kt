@@ -1,6 +1,7 @@
 package com.example.myrunjwl
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -35,11 +36,11 @@ class MainActivity : AppCompatActivity() {
             var sets = ""
             try {
                 scan = Scanner(openFileInput("setting.txt"))
-                while (scan.hasNextLine()){
+                while (scan.hasNextLine()) {
                     sets += scan.nextLine() + "\n"
                 }
             } catch (e : Exception) {
-                sets = "0\n0\n0\n"
+                sets = "0\n0\n0\n0\n"
             }
             btnSet.text = sets
             btnChall.setOnClickListener {

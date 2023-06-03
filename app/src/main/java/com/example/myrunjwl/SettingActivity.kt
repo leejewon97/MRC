@@ -1,7 +1,10 @@
 package com.example.myrunjwl
 
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.view.Surface
 import com.example.myrunjwl.databinding.ActivityChallegeBinding
 import com.example.myrunjwl.databinding.ActivitySettingBinding
 import java.io.PrintStream
@@ -18,7 +21,7 @@ class SettingActivity : AppCompatActivity() {
         // voice : 0 | 1
         // ap : 0 | 5 | 10 | 30
         // cd : 0 | 3 | 5 | 10
-        // broadcast : rotate
+        // voice male : 0 | 1
         initButton()
         initLayout()
     }
@@ -32,37 +35,45 @@ class SettingActivity : AppCompatActivity() {
         while (scan.hasNextLine()) {
             datas.add(scan.nextLine())
         }
-        binding.btnVoice.text = datas[0]
-        binding.btnAutoPause.text = datas[1]
-        binding.btnCountDown.text = datas[2]
+        binding.btnVoice.text = "음성 피드백 on/off\n" + datas[0]
+        binding.btnAutoPause.text = "러닝 자동 일시 정지\n" + datas[1]
+        binding.btnCountDown.text = "카운트 다운 변경\n" + datas[2]
+        binding.btnVoiceMale.text = "음성 피드백 성별 변경\n" + datas[3]
 }
 
     private fun initLayout() {
         binding.apply {
-            btnVoice.setOnClickListener {
+            btnVoice.setOnClickListener { // 음성 피드백; off : 0, on : 1
                 datas[0] = when (datas[0]) {
                     "0" -> "1"
                     else -> "0"
                 }
-                btnVoice.text = datas[0]
+                btnVoice.text = "음성 피드백\n" + datas[0]
             }
-            btnAutoPause.setOnClickListener {
+            btnAutoPause.setOnClickListener { // 러닝 자동 일시정지; off : 0, on : 5 | 10 | 30 초
                 datas[1] = when (datas[1]) {
                     "0" -> "5"
                     "5" -> "10"
                     "10" -> "30"
                     else -> "0"
                 }
-                btnAutoPause.text = datas[1]
+                btnAutoPause.text = "러닝 자동 일시 정지\n" + datas[1]
             }
-            btnCountDown.setOnClickListener {
+            btnCountDown.setOnClickListener { // 카운트 다운 변경; off : 0, on : 3 | 5 | 10 초
                 datas[2] = when (datas[2]) {
                     "0" -> "5"
                     "3" -> "5"
                     "5" -> "10"
                     else -> "0"
                 }
-                btnCountDown.text = datas[2]
+                btnCountDown.text = "카운트 다운 변경\n" + datas[2]
+            }
+            btnVoiceMale.setOnClickListener { // 음성 피드백 성별 변경; 여성 : 0, 남성 : 1
+                datas[3] = when (datas[3]) {
+                    "0" -> "1"
+                    else -> "0"
+                }
+                btnVoiceMale.text = "음성 피드백 성별 변경\n" + datas[3]
             }
         }
     }
