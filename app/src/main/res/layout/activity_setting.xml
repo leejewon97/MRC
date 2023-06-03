@@ -6,47 +6,119 @@
     android:layout_height="match_parent"
     tools:context=".SettingActivity">
 
-    <Button
+    <FrameLayout
         android:id="@+id/btnVoice"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="10dp"
-        android:text="btnVoice"
         app:layout_constraintBottom_toTopOf="@+id/btnVoiceMale"
         app:layout_constraintEnd_toStartOf="@+id/btnAutoPause"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/voice"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom">
+            <TextView
+                android:id="@+id/btnVoiceTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:text="TextView"
+                android:gravity="center"/>
+        </LinearLayout>
+    </FrameLayout>
 
-    <Button
+    <FrameLayout
         android:id="@+id/btnAutoPause"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="10dp"
-        android:text="btnAutoPause"
         app:layout_constraintBottom_toTopOf="@+id/btnCountDown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnVoice"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/auto_pause"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom">
+            <TextView
+                android:id="@+id/btnAutoPauseTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:text="TextView"
+                android:gravity="center"/>
+        </LinearLayout>
+    </FrameLayout>
 
-    <Button
+    <FrameLayout
         android:id="@+id/btnVoiceMale"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="10dp"
-        android:text="btnVoiceMale"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnCountDown"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnVoice" />
+        app:layout_constraintTop_toBottomOf="@+id/btnVoice">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/voice_male"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom">
+            <TextView
+                android:id="@+id/btnVoiceMaleTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:text="TextView"
+                android:gravity="center"/>
+        </LinearLayout>
+    </FrameLayout>
 
-    <Button
+    <FrameLayout
         android:id="@+id/btnCountDown"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="10dp"
-        android:text="btnCountDown"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnVoiceMale"
-        app:layout_constraintTop_toBottomOf="@+id/btnAutoPause" />
+        app:layout_constraintTop_toBottomOf="@+id/btnAutoPause">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/countdown"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom">
+            <TextView
+                android:id="@+id/btnCountDownTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:text="TextView"
+                android:gravity="center"/>
+        </LinearLayout>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

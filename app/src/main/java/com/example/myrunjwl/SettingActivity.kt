@@ -1,5 +1,6 @@
 package com.example.myrunjwl
 
+import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,7 @@ import com.example.myrunjwl.databinding.ActivitySettingBinding
 import java.io.PrintStream
 import java.util.*
 
+@SuppressLint("SetTextI18n")
 class SettingActivity : AppCompatActivity() {
     lateinit var binding: ActivitySettingBinding
     var datas:ArrayList<String> = ArrayList()
@@ -35,10 +37,22 @@ class SettingActivity : AppCompatActivity() {
         while (scan.hasNextLine()) {
             datas.add(scan.nextLine())
         }
-        binding.btnVoice.text = "음성 피드백 on/off\n" + datas[0]
-        binding.btnAutoPause.text = "러닝 자동 일시 정지\n" + datas[1]
-        binding.btnCountDown.text = "카운트 다운 변경\n" + datas[2]
-        binding.btnVoiceMale.text = "음성 피드백 성별 변경\n" + datas[3]
+        binding.btnVoiceTxt.text = "음성 피드백\n" + when (datas[0]) {
+            "0" -> "on"
+            else -> "off"
+        }
+        binding.btnAutoPauseTxt.text = "러닝 자동 일시 정지\n" + when (datas[1]) {
+            "0" -> "off"
+            else -> datas[1] + "초"
+        }
+        binding.btnCountDownTxt.text = "카운트 다운\n" + when (datas[2]) {
+            "0" -> "off"
+            else -> datas[2] + "초"
+        }
+        binding.btnVoiceMaleTxt.text = "음성 피드백 성별\n" + when (datas[3]) {
+            "0" -> "여성"
+            else -> "남성"
+        }
 }
 
     private fun initLayout() {
@@ -48,7 +62,10 @@ class SettingActivity : AppCompatActivity() {
                     "0" -> "1"
                     else -> "0"
                 }
-                btnVoice.text = "음성 피드백\n" + datas[0]
+                btnVoiceTxt.text = "음성 피드백\n" + when (datas[0]) {
+                    "0" -> "on"
+                    else -> "off"
+                }
             }
             btnAutoPause.setOnClickListener { // 러닝 자동 일시정지; off : 0, on : 5 | 10 | 30 초
                 datas[1] = when (datas[1]) {
@@ -57,7 +74,10 @@ class SettingActivity : AppCompatActivity() {
                     "10" -> "30"
                     else -> "0"
                 }
-                btnAutoPause.text = "러닝 자동 일시 정지\n" + datas[1]
+                btnAutoPauseTxt.text = "러닝 자동 일시 정지\n" + when (datas[1]) {
+                    "0" -> "off"
+                    else -> datas[1] + "초"
+                }
             }
             btnCountDown.setOnClickListener { // 카운트 다운 변경; off : 0, on : 3 | 5 | 10 초
                 datas[2] = when (datas[2]) {
@@ -66,14 +86,20 @@ class SettingActivity : AppCompatActivity() {
                     "5" -> "10"
                     else -> "0"
                 }
-                btnCountDown.text = "카운트 다운 변경\n" + datas[2]
+                btnCountDownTxt.text = "카운트 다운\n" + when (datas[2]) {
+                    "0" -> "off"
+                    else -> datas[2] + "초"
+                }
             }
             btnVoiceMale.setOnClickListener { // 음성 피드백 성별 변경; 여성 : 0, 남성 : 1
                 datas[3] = when (datas[3]) {
                     "0" -> "1"
                     else -> "0"
                 }
-                btnVoiceMale.text = "음성 피드백 성별 변경\n" + datas[3]
+                btnVoiceMaleTxt.text = "음성 피드백 성별\n" + when (datas[3]) {
+                    "0" -> "여성"
+                    else -> "남성"
+                }
             }
         }
     }
