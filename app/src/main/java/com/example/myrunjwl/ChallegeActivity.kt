@@ -3,6 +3,7 @@ package com.example.myrunjwl
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myrunjwl.databinding.ActivityChallegeBinding
 import java.io.PrintStream
@@ -36,28 +37,59 @@ class ChallegeActivity : AppCompatActivity() {
         }
     }
 
+    fun checkAlertDialog(adapter: ChallengeDataAdapter, data: ChallengeData, adapterPosition: Int) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("한 달에 ${data.km}km 챌린지를 새로 시작하겠습니까?")
+            .setPositiveButton("시작") {
+                    _, _ -> changeData(adapter, data, adapterPosition)
+            }.setNegativeButton("창 닫기") {
+                    dlg, _ -> dlg.dismiss()
+            }
+        val dlg = builder.create()
+        dlg.show()
+    }
+
+    fun cancelAlertDialog(adapter: ChallengeDataAdapter, data: ChallengeData, adapterPosition: Int) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("한 달에 ${data.km}km 챌린지를 종료하겠습니까?")
+            .setPositiveButton("종료") {
+                    _, _ -> changeData(adapter, data, adapterPosition)
+            }.setNegativeButton("창 닫기") {
+                    dlg, _ -> dlg.dismiss()
+            }
+        val dlg = builder.create()
+        dlg.show()
+    }
+
+    private fun changeData(adapter: ChallengeDataAdapter, data: ChallengeData, adapterPosition: Int) {
+        data.select = when (data.select) {
+            0 -> 1
+            else -> 0
+        }
+        // 챌린지 내에서 쓸 데이터 조작
+        val output = PrintStream(openFileOutput("challenge_list.txt", MODE_PRIVATE))
+        for (i in datas.indices) {
+            if (i != adapterPosition) { // 다른 챌린지가 켜져있다면, 꺼버리기
+                datas[i] = ChallengeData(datas[i].km, 0)
+                output.println("${datas[i].km} 0")
+            }
+            else
+                output.println("${datas[i].km} ${data.select}") // 선택된 챌린지 변경 적용
+        }
+        output.close()
+        adapter.notifyDataSetChanged()
+    }
+
     private fun initLayout() {
         binding.apply {
             challengeList.layoutManager = LinearLayoutManager(this@ChallegeActivity, LinearLayoutManager.VERTICAL, false)
             adapter = ChallengeDataAdapter(datas)
             adapter.itemClickListener = object:ChallengeDataAdapter.OnItemClickListener{
                 override fun onItemClick(data: ChallengeData, adapterPosition: Int) {
-                    data.select = when (data.select) {
-                        0 -> 1
-                        else -> 0
-                    }
-                    // 챌린지 내에서 쓸 데이터 조작
-                    val output = PrintStream(openFileOutput("challenge_list.txt", MODE_PRIVATE))
-                    for (i in datas.indices) {
-                        if (i != adapterPosition) { // 다른 챌린지가 켜져있다면, 꺼버리기
-                            datas[i] = ChallengeData(datas[i].km, 0)
-                            output.println("${datas[i].km} 0")
-                        }
-                        else
-                            output.println("${datas[i].km} ${data.select}") // 선택된 챌린지 변경 적용
-                    }
-                    output.close()
-                    adapter.notifyDataSetChanged()
+                    if (data.select == 1)
+                        cancelAlertDialog(adapter, data, adapterPosition)
+                    else
+                        checkAlertDialog(adapter, data, adapterPosition)
                 }
             }
             challengeList.adapter = adapter
